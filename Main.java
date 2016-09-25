@@ -48,6 +48,10 @@ public class Main {
 		}
 		initialize();
 		
+		ArrayList<String> s = parse(kb);
+		printLadder(s);
+		//System.out.println(s.get(0) + " " + s.get(1));
+		
 		// TODO methods to read in words, output ladder
 	}
 	
@@ -63,8 +67,18 @@ public class Main {
 	 * If command is /quit, return empty ArrayList. 
 	 */
 	public static ArrayList<String> parse(Scanner keyboard) {
-		// TO DO
-		return null;
+		String s = keyboard.next();
+		if(s.equals("/quit")){
+			return new ArrayList<String>();
+		}
+		else{
+			ArrayList<String> x = new ArrayList<String>(2);
+			x.add(s);
+			s = keyboard.next();
+			x.add(s);
+			return x;
+		}
+		
 	}
 	
 	public static ArrayList<String> getWordLadderDFS(String start, String end) {
@@ -104,7 +118,9 @@ public class Main {
 	}
 	
 	public static void printLadder(ArrayList<String> ladder) {
-		
+		for(int x = 0; x < ladder.size(); x++){
+			System.out.println(ladder.get(x));
+		}
 	}
 	// TODO
 	// Other private static methods here
