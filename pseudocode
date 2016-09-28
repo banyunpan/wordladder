@@ -1,0 +1,28 @@
+given start and end strings,
+find a ladder between start and end, using words in a given
+dictionary.
+(ladder is a sequence of strings such that each consecutive
+	string is near its immediate neighbors)
+	(two strings are near if they differ by at most one character)
+	note: this means each word must be the same length.
+		we will accomodate this by giving dictionary with
+		only the same length words as start and end.
+
+dictionary words given in a set, called words
+
+if start and end are near, return them in a ladder
+(start and end are guaranteed to be different strings)
+
+create an arraylist that will keep track of the ladder progress
+
+FOR DFS:
+if we haven't found a ladder yet, and words is not empty:
+	find a word in words that is near the current word.
+	if no other word is near the current word,
+		return the current arraylist
+	
+	once a near word is found, remove it from words.
+	add that word to the ladder arraylist.
+	if that word is not equal to end, call DFS.
+	if it is equal to end, return that arraylist.
+	
