@@ -71,23 +71,14 @@ public class Main {
 	 * @param keyboard Scanner connected to System.in
 	 * @return ArrayList of 2 Strings containing start word and end word. 
 	 * If command is /quit, return empty ArrayList. 
+	 * (actually, if command is /quit, exit the program with NO return value)
 	 */
 	public static ArrayList<String> parse(Scanner keyboard) {
 		String s = keyboard.next();
-		/*
-		if(s.equals("/quit")){
-			return new ArrayList<String>();
-		}
-		else{
-			ArrayList<String> x = new ArrayList<String>(2);
-			x.add(s);
-			s = keyboard.next();
-			x.add(s);
-			return x;
-		}*/
+		
 		ArrayList<String> words = new ArrayList<String>();
 		if(s.equals("/quit")){
-			//System.exit();
+			System.exit(0);
 			return words;
 		}
 		words.add(s.toUpperCase());
@@ -98,7 +89,7 @@ public class Main {
 		}
 		words.add(s.toUpperCase());
 		end = new String(s);
-		return words;//todo
+		return words;
 
 	}
 	/*******************************************************************
@@ -108,9 +99,9 @@ public class Main {
 	 * DFS
 	 * 
 	 * 
-	 * @param start
-	 * @param end
-	 * @return
+	 * @param start: first word of the ladder
+	 * @param end: last word of the ladder
+	 * @return: word ladder between start and end
 	 */
 	public static ArrayList<String> getWordLadderDFS(String start, String end) {
 		
@@ -146,9 +137,9 @@ public class Main {
 	
 	/**
 	 * 
-	 * @param start
-	 * @param end
-	 * @return
+	 * @param start: first word of the ladder
+	 * @param end: last word of the ladder
+	 * @return: word ladder between start and end
 	 */
 		
 	    public static ArrayList<String> getWordLadderBFS(String start, String end) {
@@ -235,7 +226,7 @@ public class Main {
 		}
 		
 	}
-	// TODO
+	//
 	// Other private static methods here
 
 	private static ArrayList<String> trivialLadder(String s){
