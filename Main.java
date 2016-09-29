@@ -5,8 +5,8 @@
  * bp9594
  * 16480
  * Megan Peregrino
- * <Student2 EID>
- * <Student2 5-digit Unique No.>
+ * mnp624
+ * 16465
  * Slip days used: <0>
  * Git URL: https://github.com/banyunpan/wordladder
  * Fall 2016
