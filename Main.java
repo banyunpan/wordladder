@@ -185,46 +185,46 @@ public class Main {
 	 */
 		
 	    public static ArrayList<String> getWordLadderBFS(String start, String end) {
-	        	ArrayList<Node> queue = new ArrayList<Node>();
-	        	Set<String> dict = makeDictionary();
-	        	Node S = new Node(null, start);
-	        	queue.add(S);
-	        	dict.remove(start);
-	        	int y = 0; // queue index
-	        	while(!queue.get(queue.size() - 1).word.equals(end)){
-	    			while(true){
-	    				Node n = new Node(queue.get(y), findNextNear(dict, queue.get(y).word, end));
-	    				if(n.word ==  null){
-	    					break;
-	    				}
-	    				if(n.word.equals(end)){
-	    					break;
-	    				}
-	    				queue.add(n);
-	    				dict.remove(n.word);
+	    	ArrayList<Node> queue = new ArrayList<Node>();
+	    	Set<String> dict = makeDictionary();
+	    	Node S = new Node(null, start);
+	    	queue.add(S);
+	    	dict.remove(start);
+	    	int y = 0; // queue index
+	    	while(!queue.get(queue.size() - 1).word.equals(end)){
+				while(true){
+					Node n = new Node(queue.get(y), findNextNear(dict, queue.get(y).word, end));
+					if(n.word ==  null){
+						break;
+					}
+					queue.add(n);
+					dict.remove(n.word);
+					if(n.word.equals(end)){
+						break;
+					}
 
-	    			}
-	    			y = y + 1;
-	    				if(dict.isEmpty()){
-	    					break;
-	    				}
-	        	}
-	        	if(!queue.get(queue.size() - 1).equals(end)){
-	        		return new ArrayList<String>();
-	        	}
-	        	Node r = queue.get(queue.size() - 1);
-	        	ArrayList<String> a = new ArrayList<String>();
-	        	do{
-	        		a.add(r.word);
-	        		r = r.parent;
-	        	}while(!(r.parent == null));
-	        	
-	        	ArrayList<String> A = new ArrayList<String>();
-	        	A.add(start);
-	        	for(int i = a.size() - 1; i >= 0; i--){
-	        		A.add(a.get(i));
-	        	}
-	        	return A;
+				}
+				y = y + 1;
+				if(dict.isEmpty()){
+					break;
+				}
+	    	}
+	    	if(!queue.get(queue.size() - 1).word.equals(end)){
+	    		return new ArrayList<String>();
+	    	}
+	    	Node r = queue.get(queue.size() - 1);
+	    	ArrayList<String> a = new ArrayList<String>();
+	    	do{
+	    		a.add(r.word);
+	    		r = r.parent;
+	    	}while(!(r.parent == null));
+	    	
+	    	ArrayList<String> A = new ArrayList<String>();
+	    	A.add(start);
+	    	for(int i = a.size() - 1; i >= 0; i--){
+	    		A.add(a.get(i));
+	    	}
+	    	return A;
 		}
     
 	public static Set<String>  makeDictionary () {
