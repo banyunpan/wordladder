@@ -13,18 +13,6 @@
  */
 
 
-//megan 
-
-//hello
-
-//hello again
-
-// hello again again
-
-// hey
-
-
-
 package assignment3;
 import java.util.*;
 import java.io.*;
@@ -32,23 +20,12 @@ import java.io.*;
 public class Main {
 	
 	// static variables and constants only here.
-	static int wordsCompared = 0;
 	static String start;
 	static String end;
 	
 	public static void main(String[] args) throws Exception {
 		
-		/*
-		 * 
-		 * testing String methods
-		 * 
-		 */
-		/*
-		String string = new String("hello");
-		System.out.println(string.substring(string.length(), string.length()));
-		System.out.println(Character.toString((char)('A' + 1)));
-		*/
-		
+	
 		Scanner kb;	// input Scanner for commands
 		PrintStream ps;	// output file
 		// If arguments are specified, read/write from/to files instead of Std IO.
@@ -63,23 +40,13 @@ public class Main {
 		initialize();
 		
 		ArrayList<String> s = parse(kb);
-		//printLadder(s);
-		//System.out.println(s.get(0) + " " + s.get(1));
 		
-		// TODO methods to read in words, output ladder
-		
-		long startTime = System.nanoTime();
-		
-		// dfs solution
+		//
 		//ArrayList<String> ladder = getWordLadderDFS(s.get(0), s.get(1));
 		ArrayList<String> ladder = getWordLadderBFS(s.get(0), s.get(1));
-		
-		long endTime = System.nanoTime();
-		
+			
 		printLadder(ladder);
 
-		System.out.println("DFS took " + (endTime - startTime) + " ns");
-		System.out.println(wordsCompared + " words compared");
 	}
 	
 	public static void initialize() {
@@ -296,7 +263,6 @@ public class Main {
 				ladder.remove(ladder.size() - 1);
 				break;
 			}
-			wordsCompared++;
 			dict.remove(nearWord);
 			ladder.add(nearWord);
 			if(isNear(nearWord, endWord)){
