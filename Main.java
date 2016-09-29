@@ -120,7 +120,7 @@ public class Main {
 		}*/
 		ArrayList<String> words = new ArrayList<String>();
 		if(s.equals("/quit")){
-			//System.exit();
+			System.exit();
 			return words;
 		}
 		words.add(s.toUpperCase());
