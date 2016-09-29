@@ -32,6 +32,9 @@ import java.io.*;
 public class Main {
 	
 	// static variables and constants only here.
+	static int wordsCompared = 0;
+	static String start;
+	static String end;
 	
 	public static void main(String[] args) throws Exception {
 		
@@ -40,9 +43,11 @@ public class Main {
 		 * testing String methods
 		 * 
 		 */
+		/*
 		String string = new String("hello");
 		System.out.println(string.substring(string.length(), string.length()));
-		
+		System.out.println(Character.toString((char)('A' + 1)));
+		*/
 		
 		Scanner kb;	// input Scanner for commands
 		PrintStream ps;	// output file
@@ -58,28 +63,41 @@ public class Main {
 		initialize();
 		
 		ArrayList<String> s = parse(kb);
-		printLadder(s);
+		//printLadder(s);
 		//System.out.println(s.get(0) + " " + s.get(1));
 		
 		// TODO methods to read in words, output ladder
 		
+		long startTime = System.nanoTime();
+		
 		// dfs solution
 		ArrayList<String> ladder = getWordLadderDFS(s.get(0), s.get(1));
 		//ArrayList<String> ladder2 = getWordLadderBFS(s.get(0), s.get(1));
-		if(ladder.size() == 0){
-			System.out.println("no word ladder can be found between " + s.get(0) + " and " + s.get(1) + ".");
-		}
-		else{
-			System.out.println("a " + (ladder.size()-2) + "-rung word ladder exists between "
-								+ s.get(0) + " and " + s.get(1) + ".");
-			printLadder(s);
-		}
+		
+		long endTime = System.nanoTime();
+		
+		printLadder(ladder);
+
+		System.out.println("DFS took " + (endTime - startTime) + " ns");
+		System.out.println(wordsCompared + " words compared");
 	}
 	
 	public static void initialize() {
 		// initialize your static variables or constants here.
 		// We will call this method before running our JUNIT tests.  So call it 
 		// only once at the start of main.
+		
+		/*
+		 *plan:
+		 *call makeDictionary() to initialize a data structure for the dictionary.
+		 *initialize some static field based on this dictionary, including
+		 *some heuristical information that will help nextNearWord find
+		 *the best next word to consider.
+		 *
+		 *the key thing is to create this structure and heuristical info fields.
+		 *so far, dictionary is simply a set, no particular order assumed
+		 * 
+		 */
 	}
 	
 	/**
@@ -102,14 +120,18 @@ public class Main {
 		}*/
 		ArrayList<String> words = new ArrayList<String>();
 		if(s.equals("/quit")){
+			//System.exit();
 			return words;
 		}
-		words.add(s);
+		words.add(s.toUpperCase());
+		start = new String(s);
 		s = keyboard.next();
 		if(s.equals("/quit")){
 			return new ArrayList<String>();
 		}
-		return null;//todo
+		words.add(s.toUpperCase());
+		end = new String(s);
+		return words;//todo
 
 	}
 	/*******************************************************************
@@ -130,17 +152,13 @@ public class Main {
 		// TODO some code
 		
 		//start and end are guaranteed to be different
-		
+		start = start.toUpperCase();
+		end = end.toUpperCase();
 		Set<String> dict = makeDictionary();
-		// TODO more code
-		if(dict.size() == 0){
-			System.out.println("empty dictionary");
-		}
-
 		if(isNear(start, end)){
 			ArrayList<String> ladder = new ArrayList<String>();
-			ladder.add(start);
-			ladder.add(end);
+			ladder.add(start.toLowerCase());
+			ladder.add(end.toLowerCase());
 			return ladder;
 		}
 		
@@ -148,9 +166,14 @@ public class Main {
 		dict.remove(end);
 		
 		ArrayList<String> ladder = new ArrayList<String>();
-		ladder.add(start);
+		ladder.add(start.toLowerCase());
 		
-		return DFS(dict, ladder, end);
+		
+		
+		DFS(dict, ladder, end);
+		
+		
+		return ladder;
 		
 	}
 	
@@ -167,23 +190,39 @@ public class Main {
 		Set<String> words = new HashSet<String>();
 		Scanner infile = null;
 		try {
-			//infile = new Scanner (new File("five_letter_words.txt"));
-			infile = new Scanner (new File("short_dict.txt"));
+			infile = new Scanner (new File("five_letter_words.txt"));
+			//infile = new Scanner (new File("short_dict.txt"));
+			//infile = new Scanner(new File("my_dict.txt"));
 		} catch (FileNotFoundException e) {
 			System.out.println("Dictionary File not Found!");
 			e.printStackTrace();
 			System.exit(1);
 		}
+		long startTime = System.nanoTime();
 		while (infile.hasNext()) {
 			words.add(infile.next().toUpperCase());
 		}
+		long endTime = System.nanoTime();
+	//	System.out.println((endTime - startTime) + "ns for makeDictionary");
 		return words;
 	}
 	
 	public static void printLadder(ArrayList<String> ladder) {
-		for(int x = 0; x < ladder.size(); x++){
-			System.out.println(ladder.get(x));
+		//case insensitive
+		if(ladder.size() == 0){
+			System.out.println("no word ladder can be found between " +
+								start.toLowerCase() + " and " +
+								end.toLowerCase() + ".");
 		}
+		else{
+			System.out.println("a " + (ladder.size()-2) + "-rung word ladder exists between "
+								+ start.toLowerCase() + " and " + end.toLowerCase() + ".");
+		
+			for(int x = 0; x < ladder.size(); x++){
+				System.out.println(ladder.get(x).toLowerCase());
+			}
+		}
+		
 	}
 	// TODO
 	// Other private static methods here
@@ -204,15 +243,16 @@ public class Main {
 		
 		//entering this method,
 		//we assume that currentWord and endWord are not near
-		
+		endWord = endWord.toUpperCase();
 		while(!isNear(ladder.get(ladder.size() - 1), endWord)){
-			String nearWord = findNextNear(dict, ladder.get(ladder.size() - 1));
+			String nearWord = findNextNear(dict, ladder.get(ladder.size() - 1), endWord);
 			
 			if(nearWord == null){
 				//reached a dead end in DFS
 				ladder.remove(ladder.size() - 1);
 				break;
 			}
+			wordsCompared++;
 			dict.remove(nearWord);
 			ladder.add(nearWord);
 			if(isNear(nearWord, endWord)){
@@ -225,23 +265,27 @@ public class Main {
 		
 		return ladder;
 	}
-	private static String findNextNear(Set<String> dict, String word){
+	private static String findNextNear(Set<String> dict, String word, String key){
 		
 		String s = word.toUpperCase();
 		
 		for(int pos = 0; pos < word.length(); pos++){
 			//change one letter on word to see if it matches a word in dict
 			char letter = s.charAt(pos);
-			int i = (letter - 'A' + 1) % 26; // next letter of alphabet to replace with
-			while(i != letter){ // cycle through the alphabet
+			int i = (key.charAt(pos) - 'A') % 26; // next letter of alphabet to replace with
+			int looped = i;
+			do { // cycle through the alphabet
 				String temp = new String(s.substring(0, pos) +
-										Character.toString((char)(letter + 'A')) +
+										Character.toString((char)(i + 'A')) +
 										s.substring(pos+1,s.length()));
 				if(dict.contains(temp)){
 					return temp;
 				}
 				i = (i + 1) % 26;
-			}
+				if(i == letter){
+					i = (i + 1) % 26;
+				}
+			}while(i != looped/*(letter - 'A')*/);
 		}
 		
 		return null; // couldn't find something near to word in dict
@@ -254,14 +298,12 @@ public class Main {
 		
 		int differences = 0;
 		for(int i = 0; i < temp1.length; i++){
-			for(int j = 0; j < temp2.length; j++){
-				if(temp1[i] != temp2[j]){
+				if(temp1[i] != temp2[i]){
 					differences++;
 				}
 				if(differences > 1){
 					return false;
 				}
-			}
 		}
 		
 		return true;//todo
