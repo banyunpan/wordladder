@@ -71,14 +71,14 @@ public class Main {
 		long startTime = System.nanoTime();
 		
 		// dfs solution
-		ArrayList<String> ladder = getWordLadderDFS(s.get(0), s.get(1));
-		//ArrayList<String> ladder2 = getWordLadderBFS(s.get(0), s.get(1));
+		//ArrayList<String> ladder = getWordLadderDFS(s.get(0), s.get(1));
+		ArrayList<String> ladder = getWordLadderBFS(s.get(0), s.get(1));
 		
 		long endTime = System.nanoTime();
 		
 		printLadder(ladder);
 
-		System.out.println("DFS took " + (endTime - startTime) + " ns");
+		System.out.println("ladder took " + (endTime - startTime) + " ns");
 		System.out.println(wordsCompared + " words compared");
 	}
 	
@@ -120,7 +120,7 @@ public class Main {
 		}*/
 		ArrayList<String> words = new ArrayList<String>();
 		if(s.equals("/quit")){
-			System.exit();
+			//System.exit(); //todo
 			return words;
 		}
 		words.add(s.toUpperCase());
@@ -192,24 +192,26 @@ public class Main {
 	        	dict.remove(start);
 	        	int y = 0; // queue index
 	        	while(!queue.get(queue.size() - 1).word.equals(end)){
+	        		if(y >= queue.size()){
+	        			break;
+	        		}
 	    			while(true){
 	    				Node n = new Node(queue.get(y), findNextNear(dict, queue.get(y).word, end));
 	    				if(n.word ==  null){
 	    					break;
 	    				}
+	    				queue.add(n);
+	    				dict.remove(n.word);
 	    				if(n.word.equals(end)){
 	    					break;
 	    				}
-	    				queue.add(n);
-	    				dict.remove(n.word);
-
 	    			}
 	    			y = y + 1;
 	    				if(dict.isEmpty()){
 	    					break;
 	    				}
 	        	}
-	        	if(!queue.get(queue.size() - 1).equals(end)){
+	        	if(!queue.get(queue.size() - 1).word.equals(end)){
 	        		return new ArrayList<String>();
 	        	}
 	        	Node r = queue.get(queue.size() - 1);
@@ -293,7 +295,6 @@ public class Main {
 				ladder.remove(ladder.size() - 1);
 				break;
 			}
-			wordsCompared++;
 			dict.remove(nearWord);
 			ladder.add(nearWord);
 			if(isNear(nearWord, endWord)){
@@ -320,6 +321,7 @@ public class Main {
 										Character.toString((char)(i + 'A')) +
 										s.substring(pos+1,s.length()));
 				if(dict.contains(temp)){
+					wordsCompared++;
 					return temp;
 				}
 				i = (i + 1) % 26;
