@@ -1,14 +1,14 @@
 /* WORD LADDER Main.java
  * EE422C Project 3 submission by
  * Replace <...> with your actual data.
- * <Student1 Name>
- * <Student1 EID>
- * <Student1 5-digit Unique No.>
- * <Student2 Name>
+ * Ban-Yun (Toby) Pan
+ * bp9594
+ * 16480
+ * Megan Peregrino
  * <Student2 EID>
  * <Student2 5-digit Unique No.>
  * Slip days used: <0>
- * Git URL:
+ * Git URL: https://github.com/banyunpan/wordladder
  * Fall 2016
  */
 
