@@ -185,75 +185,46 @@ public class Main {
 	 */
 		
 	    public static ArrayList<String> getWordLadderBFS(String start, String end) {
-	    	int dictCount = 0; // count for words in dictionary
-	    	int matches = 0;   // counts how many letters don't match
-	    	int LCount = 0;    // counts which letter is being compared
-	    	int qCount = 0;    // counts current place in the queue
-	    	int children = 0;  // makes sure word in queue has children
-	    	
-	    	ArrayList<Node> queue = new ArrayList<Node>(); // queue for BFS path
-	    	Set<String> dict = makeDictionary();
-	    	ArrayList<String> dictArray = new ArrayList<String>(dict); // turns dictionary into ArrayList
-	    	
-	    	Node S = new Node(null, start); // makes the start word a Node
-	    	queue.add(S); //adds start to queue
-	    	
-	    	while(!queue.isEmpty()){ // BFS will return null if queue becomes empty
-	    	
-	    		while(dictCount < dictArray.size()){ // checks every word in the dictionary
-	    			while(LCount < 5){ // checks each letter to compare
-	    				if(queue.get(qCount).word.charAt(LCount) != dictArray.get(dictCount).charAt(LCount)){
-	    					matches = matches + 1;
+	        	ArrayList<Node> queue = new ArrayList<Node>();
+	        	Set<String> dict = makeDictionary();
+	        	Node S = new Node(null, start);
+	        	queue.add(S);
+	        	dict.remove(start);
+	        	int y = 0; // queue index
+	        	while(!queue.get(queue.size() - 1).word.equals(end)){
+	    			while(true){
+	    				Node n = new Node(queue.get(y), findNextNear(dict, queue.get(y).word, end));
+	    				if(n.word ==  null){
+	    					break;
 	    				}
-	    				LCount = LCount + 1;
-	    			}
-	    			if(matches == 0){
-	    				dictArray.remove(dictCount);
-	    			}
-	    			else if(matches == 1){
-	    				Node A = new Node(queue.get(qCount), dictArray.get(dictCount)); // makes word from dictionary a node, then adds to queue
-	    				queue.add(A);
-	    				if(dictArray.get(dictCount).equals(end)){           // if end word is found,
-	    					ArrayList<String> wl = new ArrayList<String>(); // creates backwards word ladder, getting from parent
-	    					Node n = queue.get(queue.size() - 1);
-	    					int c = 0;
-	    					while(!n.equals(S)){
-	    						wl.add(n.word);
-	    						n = n.parent;
-	    						c = c + 1;
-	    					}
-	    					ArrayList<String> WL = new ArrayList<String>(); // creates new queue, reverses it
-	    					WL.add(S.word);
-	    					while(c > 0){
-	    						WL.add(wl.get(c - 1));
-	    						c = c - 1;
-	    					}
-	    					return WL;
+	    				if(n.word.equals(end)){
+	    					break;
 	    				}
-	    				dictArray.remove(dictCount);
-	    				children = children + 1;
+	    				queue.add(n);
+	    				dict.remove(n.word);
+
 	    			}
-	    			else{
-	    				dictCount = dictCount + 1;
-	    			}
-	    			LCount = 0;
-	    			matches = 0;
-	    		}
-	    	
-	    		if(children == 0){
-	    			queue.remove(qCount);
-	    			if(queue.get(qCount).equals(null)){
-	    				qCount = queue.size() - 1;
-	    			}
-	    		}
-	    		else{
-	    			qCount = qCount + 1;
-	    		}
-	    		children = 0;
-	    		dictCount = 0;
-	    	}
-			
-			return null; // replace this line later with real return
+	    			y = y + 1;
+	    				if(dict.isEmpty()){
+	    					break;
+	    				}
+	        	}
+	        	if(!queue.get(queue.size() - 1).equals(end)){
+	        		return new ArrayList<String>();
+	        	}
+	        	Node r = queue.get(queue.size() - 1);
+	        	ArrayList<String> a = new ArrayList<String>();
+	        	do{
+	        		a.add(r.word);
+	        		r = r.parent;
+	        	}while(!(r.parent == null));
+	        	
+	        	ArrayList<String> A = new ArrayList<String>();
+	        	A.add(start);
+	        	for(int i = a.size() - 1; i >= 0; i--){
+	        		A.add(a.get(i));
+	        	}
+	        	return A;
 		}
     
 	public static Set<String>  makeDictionary () {
